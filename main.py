@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 def add_time(start_time, duration, day=""):
  
@@ -16,10 +16,18 @@ def add_time(start_time, duration, day=""):
     total_time_diff_lst = str(time_difference).split(",")[1].split(":")
     total_time_diff = (int(total_time_diff_lst[0]) * 60) + (int(total_time_diff_lst[1]))
 
-    if total_time_added > total_time_diff:
-        days = "(next day)"
+    days = 0
+    while total_time_added > total_time_diff:
+        days += 1
+        total_time_added -= 1440
+        
+
+    if days == 1:
+        day_exp = "(next day)"
+    elif days > 1:
+        day_exp = f"{str(days)} days later"
     else:
-        days = ""
+        day_exp = ""
 
 
     if day != "":
@@ -27,8 +35,8 @@ def add_time(start_time, duration, day=""):
     else:
         final_result = result.strftime("%I:%M %p")
 
-    if days != "":
-        final_result = f"{final_result} {days}"
+    if day_exp != "":
+        final_result = f"{final_result} {day_exp}"
 
     return final_result
 
@@ -45,8 +53,8 @@ print(add_time("11:43 AM", "00:20"))
 print(add_time("10:10 PM", "3:30"))
 # # Returns: 1:40 AM (next day)
 
-# print(add_time("11:43 PM", "24:20", "tueSday"))
+print(add_time("11:43 PM", "24:20", "tueSday"))
 # # Returns: 12:03 AM, Thursday (2 days later)
 
-# print(add_time("6:30 PM", "205:12"))
+print(add_time("6:30 PM", "205:12"))
 # # Returns: 7:42 AM (9 days later)
