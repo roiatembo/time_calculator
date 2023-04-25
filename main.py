@@ -1,7 +1,16 @@
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta
 
 def add_time(start_time, duration, day=""):
- 
+    
+    days_of_week = {"monday": 0,
+                    "tuesday": 1,
+                    "wednesday": 2,
+                    "thursday" : 3,
+                    "friday": 4,
+                    "saturday": 5,
+                    "sunday" : 6
+    }
+
     start_dt = (datetime.strptime(start_time, "%I:%M %p")).strftime("%H:%M")
 
     if ":" in duration:
@@ -25,18 +34,30 @@ def add_time(start_time, duration, day=""):
     if days == 1:
         day_exp = "(next day)"
     elif days > 1:
-        day_exp = f"{str(days)} days later"
+        day_exp = f"({str(days)} days later)"
     else:
         day_exp = ""
 
 
     if day != "":
-        final_result = result.strftime("%I:%M %p, %A")
+        day_number = days_of_week[day.lower()] + days
+        while day_number > 6:
+            day_number -= 7
+        
+        for keys in days_of_week:
+            if days_of_week[keys] == day_number:
+                the_day = keys
+                break
+
+        final_result = f"{result.strftime('%I:%M %p')}, {the_day.title()}"
     else:
         final_result = result.strftime("%I:%M %p")
 
     if day_exp != "":
         final_result = f"{final_result} {day_exp}"
+
+    if final_result[:1] == "0":
+        final_result = final_result[1:]
 
     return final_result
 
